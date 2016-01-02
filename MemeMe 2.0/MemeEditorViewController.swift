@@ -89,6 +89,10 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         presentViewController(shareController, animated: true, completion: nil)
     }
     
+    @IBAction func cancelAction(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     @IBAction func pickAnImageFromCamera(sender: AnyObject) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -154,21 +158,21 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     func keyboardWillShow(notification: NSNotification) {
+        if bottomTextField.editing {
         view.frame.origin.y -= getKeyboardHeight(notification)
+        }
     }
     
     func keyboardWillHide(notification: NSNotification) {
-        view.frame.origin.y += getKeyboardHeight(notification)
+        if bottomTextField.editing {
+        view.frame.origin.y = 0
+        }
     }
     
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
         let userInfo = notification.userInfo
         let keyboardSize = userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue // of CGRect
-        if bottomTextField.editing {
             return keyboardSize.CGRectValue().height
-        } else {
-            return 0
-        }
         
     }
     
